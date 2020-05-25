@@ -1,0 +1,43 @@
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+<script src="exbuvasa.js"></script>
+<link rel="stylesheet" href="jquery-ui.css">
+<style>
+body
+{
+    font-family: 'arial';
+    font-weight: normal;
+    font-style: normal;
+}
+</style>
+
+<script>
+var ebvs;
+console.log(new exbuvasa().parse("3+2").result);
+
+$(document).ready(function () {
+	ebvs=new exbuvasa({
+		allowedchars:"|!#%&/()=?',;.:-_+*@ ",
+		jqinputselector: "#expression",
+		jqexpressionselector:"#resultingexpression",
+		jqresultselector: "#result",
+		variables: {
+			"a":1,"b":2,"c":3, "aa":"'AA'", "bb":"'BB'"
+		}
+	});
+	
+	
+});
+
+</script>
+<body>
+Expression<br>
+<input type="text" size="100" id="expression">
+<br><br>
+Resulting javascript expression<br>
+<input type="text" size="100" id="resultingexpression" >
+<br><br>
+Evaluated expression result<br>
+<input type="text" size="100" id="result" >
+<br><br>
+</body>
