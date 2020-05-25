@@ -1,2 +1,2 @@
 # exbuvasa
-expression builder validator and sanitizer for javascript
+EXpression BUilder VAlidator and SAnitizer for javascript
