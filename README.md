@@ -4,9 +4,9 @@ EXpression BUilder VAlidator and SAnitizer for javascript
 Exbuvasa can be used as with or without jquery.
 If used with jquery it shows available terms as jquery-ui autocomplete (if available).
 
-Demo
+Demo comming soon.
 
-#Basic Usage with jQuery:
+Basic Usage with jQuery:
 
 var ebvs=new exbuvasa({
   jqinputselector: "#expression", //required
@@ -14,7 +14,7 @@ var ebvs=new exbuvasa({
   jqresultselector: "#result" //optional
 });
 
-#Basic usage without jQuery
+Basic usage without jQuery
 
 console.log(new exbuvasa().parse("2 in (1,2,3,4)").result);
 
