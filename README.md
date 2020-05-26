@@ -1,12 +1,17 @@
 # exbuvasa
 EXpression BUilder VAlidator and SAnitizer for javascript
 
-Exbuvasa can be used as with or without jquery.
-If used with jquery it shows available terms as jquery-ui autocomplete (if available).
+Expressions can be built using a set of predefined or user defined functions, operators and variables. This keeps yours expressions safe from containing dangerous or injected code. 
 
-Demo comming soon.
+Exbuvasa can be used with or without jquery.
 
-Basic Usage with jQuery:
+If used with jquery inside an input of type text, it shows available terms as jquery-ui autocomplete (if available) and colors the background of the input according to the result of validating the expression. It also restricts the special characters (other but numbers and letters) that the user can type inside the input field.
+
+Whitout jquery, exbuvasa can be given and expression that would be validated and converted to a javascript expression. It can return the converted expressionand the result of evaluating it, or the error messages from the validation
+
+## Demo comming soon.
+
+## Basic Usage with jQuery:
 
 var ebvs=new exbuvasa({
   jqinputselector: "#expression", //required
@@ -14,7 +19,7 @@ var ebvs=new exbuvasa({
   jqresultselector: "#result" //optional
 });
 
-Basic usage without jQuery
+## Basic usage without jQuery
 
 console.log(new exbuvasa().parse("2 in (1,2,3,4)").result);
 
