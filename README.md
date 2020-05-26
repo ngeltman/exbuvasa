@@ -1,4 +1,4 @@
-# exbuvasa
+# Exbuvasa
 EXpression BUilder VAlidator and SAnitizer for javascript
 
 Expressions can be built using a set of predefined or user defined functions, operators and variables. This keeps yours expressions safe from containing dangerous or injected code. 
@@ -14,11 +14,12 @@ Whitout jquery, exbuvasa can be given and expression that would be validated and
 
 ## Basic Usage with jQuery:
 ~~~
-var ebvs=new exbuvasa({
+var props={
   jqinputselector: "#expression", //required
   jqexpressionselector:"#resultingexpression", //optional
   jqresultselector: "#result" //optional
-});
+};
+var ebvs=new exbuvasa(props);
 ~~~
 
 ## Basic usage without jQuery
@@ -26,4 +27,14 @@ var ebvs=new exbuvasa({
 console.log(new exbuvasa().parse("2 in (1,2,3,4)").result);
 ~~~
 
+## Properties
+An object whic can contain the following:
+
+**okcolor**: default to '#dfd'
+**notokcolor**: default to '#fdd'
+**showtitle**: default to true. If true, the title attribute of the input field will show a status message, ie. an error. If false, then original title attribute for input field is kept.
+**allowedchars**: defaults to "|!#%&/()=?',;.:-_+*@ ". String containing all special chars accepted as user input
 Exbuvasa was inspired by filtrex (https://github.com/joewalnes/filtrex). But I needed to run it not only as a jquery plugin, but also inside a java scriptengine
+**jqinputselector**: css selector used to find the input element/s to use with 
+**jqexpressionselector**: element in which the resulting javascript expression will be showed
+**jqresultselector**: element in which the result of evaluating te javascript expression will be showed
