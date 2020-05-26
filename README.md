@@ -13,7 +13,7 @@ Whitout jquery, exbuvasa can be given and expression that would be validated and
 
 ## Basic Usage with jQuery:
 
-var ebvs=new exbuvasa({
+> var ebvs=new exbuvasa({
   jqinputselector: "#expression", //required
   jqexpressionselector:"#resultingexpression", //optional
   jqresultselector: "#result" //optional
