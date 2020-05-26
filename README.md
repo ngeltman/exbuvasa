@@ -31,10 +31,18 @@ console.log(new exbuvasa().parse("2 in (1,2,3,4)").result);
 An object whic can contain the following:
 
 **okcolor**: default to '#dfd'
+
 **notokcolor**: default to '#fdd'
+
 **showtitle**: default to true. If true, the title attribute of the input field will show a status message, ie. an error. If false, then original title attribute for input field is kept.
+
 **allowedchars**: defaults to "|!#%&/()=?',;.:-_+*@ ". String containing all special chars accepted as user input
-Exbuvasa was inspired by filtrex (https://github.com/joewalnes/filtrex). But I needed to run it not only as a jquery plugin, but also inside a java scriptengine
+
 **jqinputselector**: css selector used to find the input element/s to use with 
+
 **jqexpressionselector**: element in which the resulting javascript expression will be showed
+
 **jqresultselector**: element in which the result of evaluating te javascript expression will be showed
+
+
+Exbuvasa was inspired by filtrex (https://github.com/joewalnes/filtrex). But I needed to run it not only as a jquery plugin, but also inside a java scriptengine
