@@ -10,7 +10,7 @@ If used with jquery inside an input of type text, it shows available terms as jq
 Whitout jquery, exbuvasa can be given and expression that would be validated and converted to a javascript expression. It can return the converted expressionand the result of evaluating it, or the error messages from the validation
 
 ## Demo 
-https://ngeltman.github.io/exbuvasa/demo.html.
+[Demo](https://ngeltman.github.io/exbuvasa/demo.html)
 
 ## Basic Usage with jQuery:
 ~~~
