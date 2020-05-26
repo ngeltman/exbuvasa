@@ -12,16 +12,17 @@ Whitout jquery, exbuvasa can be given and expression that would be validated and
 ## Demo comming soon.
 
 ## Basic Usage with jQuery:
-
-> var ebvs=new exbuvasa({
+~~~
+var ebvs=new exbuvasa({
   jqinputselector: "#expression", //required
   jqexpressionselector:"#resultingexpression", //optional
   jqresultselector: "#result" //optional
 });
+~~~
 
 ## Basic usage without jQuery
-
+~~~
 console.log(new exbuvasa().parse("2 in (1,2,3,4)").result);
-
+~~~
 
 Exbuvasa was inspired by filtrex (https://github.com/joewalnes/filtrex). But I needed to run it not only as a jquery plugin, but also inside a java scriptengine
