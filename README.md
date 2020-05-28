@@ -12,15 +12,30 @@ Whitout jquery, exbuvasa can be given and expression that would be validated and
 ## Demo 
 [Demo](https://ngeltman.github.io/exbuvasa/demo.html)
 
+## Basics
+Given an expression, exbuasa parses it and returns an obect containing:
+~~~
+"ok": true if the expression has succesfully parsed and evaluated
+"msg": error messages,
+"terms": array of terms that conform the resulting expression,
+"expression": resulting javascript expression,
+"result": result of evaluating the resulting expression
+~~~
+
 ## Basic Usage with jQuery:
 ~~~
 var props={
-  jqinputselector: "#expression", //required
-  jqexpressionselector:"#resultingexpression", //optional
-  jqresultselector: "#result" //optional
+  jqinputselector: "#expression"
 };
 var ebvs=new exbuvasa(props);
 ~~~
+jqinputselector has to be an input of type text or textarea
+As yhe user types an expression, exbuvasa sets the following attributes on the element (ie #expression)
+
+exbuvasa-ok
+exbuvasa-result
+exbuvasa-msg
+exbuvasa-expression
 
 ## Basic usage without jQuery
 ~~~
