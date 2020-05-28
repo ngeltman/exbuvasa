@@ -111,16 +111,16 @@ An object which can contain the following:
 
 ~~~
 text:{
-	doubleQuotesNotAllowed: "Double quotes are not allowed. Always use single quotes",
-	unclosedQuote: "Unclosed quote",
-	invalidExpression:"Invalid expression",
-	emptyExpression: "Empty expression",
-	openParWasExpected: "( was expected",
-	closeParWasExpected: ") was expected",
-	charIsNotAllowed: "is not allowed",
-	pastedText: "Pasted text",
-	hasNotAllowedChars: "has not allowed characters",
-	allowedCharsAre: "Allowed chars are letters, numbers and"
+	"doubleQuotesNotAllowed": "Double quotes are not allowed. Always use single quotes",
+	"unclosedQuote": "Unclosed quote",
+	"invalidExpression":"Invalid expression",
+	"emptyExpression": "Empty expression",
+	"openParWasExpected": "( was expected",
+	"closeParWasExpected": ") was expected",
+	"charIsNotAllowed": "is not allowed",
+	"pastedText": "Pasted text",
+	"hasNotAllowedChars": "has not allowed characters",
+	"allowedCharsAre": "Allowed chars are letters, numbers and"
 	}
 ~~~
 
@@ -159,7 +159,7 @@ operators:{
 	"eq": "==",
 	"neq": "!=",
 	"in": "isin",
-"contains": "contains"
+	"contains": "contains"
 }
 ~~~
 
@@ -192,26 +192,29 @@ props={
 			"in": "isin",
 			"contains": "contains"
 		},
-	variables : {},
+	variables : {
+		"name":"'peter'",
+		"age": "42"
+	},
 	functions : {
 			"left": "left",
 			"right": "right",
 			"substring": "substr",
 			"date": "date"
 		},
-	okcolor :'#dfd',
-	notokcolor: '#fdd',
+	okcolor :"#dfd",
+	notokcolor: "#fdd",
 	text:{
-			doubleQuotesNotAllowed: "Double quotes are not allowed. Always use single quotes",
-			unclosedQuote: "Unclosed quote",
-			invalidExpression:"Invalid expression",
-			emptyExpression: "Empty expression",
-			openParWasExpected: "( was expected",
-			closeParWasExpected: ") was expected",
-			charIsNotAllowed: "is not allowed",
-			pastedText: "Pasted text",
-			hasNotAllowedChars: "has not allowed characters",
-			allowedCharsAre: "Allowed chars are letters, numbers and"
+			"doubleQuotesNotAllowed": "Double quotes are not allowed. Always use single quotes",
+			"unclosedQuote": "Unclosed quote",
+			"invalidExpression":"Invalid expression",
+			"emptyExpression": "Empty expression",
+			"openParWasExpected": "( was expected",
+			"closeParWasExpected": ") was expected",
+			"charIsNotAllowed": "is not allowed",
+			"pastedText": "Pasted text",
+			"hasNotAllowedChars": "has not allowed characters",
+			"allowedCharsAre": "Allowed chars are letters, numbers and"
 		},
 	showtitle:true,
 	allowedchars: "|!#%&/()=?',;.:-_+*@ ",
