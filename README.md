@@ -30,12 +30,14 @@ var props={
 var ebvs=new exbuvasa(props);
 ~~~
 jqinputselector has to be an input of type text or textarea
-As yhe user types an expression, exbuvasa sets the following attributes on the element (ie #expression)
 
+As yhe user types an expression, exbuvasa sets the following attributes on the element (ie #expression)
+~~~
 exbuvasa-ok
 exbuvasa-result
 exbuvasa-msg
 exbuvasa-expression
+~~~
 
 ## Basic usage without jQuery
 ~~~
