@@ -99,7 +99,10 @@ An object which can contain the following:
 
 **showtitle**: default to true. If true, the title attribute of the input field will show a status message, ie. an error. If false, then original title attribute for input field is kept.
 
-**allowedchars**: defaults to "|!#%&/()=?',;.:-_+*@ ". String containing all special chars accepted as user input
+**allowedchars**: String containing all special chars accepted as user input. Defaults to 
+~~~
+" |!#%&/()=?',;.:-_+*@  "
+~~~ 
 
 **jqinputselector**: css selector used to find the input element/s to use with 
 
