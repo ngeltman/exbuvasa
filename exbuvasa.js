@@ -4,24 +4,26 @@ Provides a simple way to build logical or aritmetical expressions with functions
 Validates expressions against predefined or user defined set of operators, variables and functions
 Keeps expressions on a sandbox in order to prevent code injection
 parse(expression)
-	returns an object:
-			"ok": boolean,
-            "msg": error mesages,
-            "terms": terms of the resulting expression as an array,
-            "expression": resulting javascript expression,
-            "result": result of evaluating the resulting expression
+returns an object:
+"ok": boolean,
+"msg": errors and mesages,
+"terms": terms of the resulting expression as an array,
+"expression": resulting javascript expression,
+"result": result of evaluating the resulting expression
 Written by Nicolas Geltman on 2020-05-25
-*/
+ */
 function exbuvasa(props) {
     var exbuvasa = this;
-	props=props||{};
-	
+    props = props || {};
+
     this.operators = props.operators || {
         "and": "&&",
         "or": "||",
         "not": "!",
         "gt": ">",
+		"ge": ">=",
         "lt": "<",
+		"le": "<=",
         "eq": "==",
         "neq": "!=",
         "in": "isin",
@@ -34,18 +36,30 @@ function exbuvasa(props) {
         "substring": "substr",
         "date": "date"
     };
-	this.tags=getTags();
+    this.tags = getTags();
     this.okcolor = props.okcolor || '#dfd';
     this.notokcolor = props.notokcolor || '#fdd';
-	this.showtitle=true;
-	if(typeof props.showtitle!="undefined"){
-		this.showtitle=props.showtitle;
+	this.text=props.text||{
+		doubleQuotesNotAllowed: "Double quotes are not allowed. Always use single quotes",
+		unclosedQuote: "Unclosed quote",
+		invalidExpression:"Invalid expression",
+		emptyExpression: "Empty expression",
+		openParWasExpected: "( was expected",
+		closeParWasExpected: ") was expected",
+		charIsNotAllowed: "is not allowed",
+		pastedText: "Pasted text",
+		hasNotAllowedChars: "has not allowed characters",
+		allowedCharsAre: "Allowed chars are letters, numbers and"
 	}
+    this.showtitle = true;
+    if (typeof props.showtitle != "undefined") {
+        this.showtitle = props.showtitle;
+    }
 
     this.allowedchars = props.allowedchars || "|!#%&/()=?',;.:-_+*@ ";
-	if(this.allowedchars.indexOf('"')>=0){
-		throw "Double quotes are not allowed. Always use single quotes";
-	}
+    if (this.allowedchars.indexOf('"') >= 0) {
+        throw this.text.doubleQuotesNotAllowed;
+    }
 
     this.jqexpressionselector = props.jqexpressionselector || null;
     this.jqresultselector = props.jqresultselector || null;
@@ -76,33 +90,35 @@ function exbuvasa(props) {
             return false;
         }
     }
-	
-	function getTags(){
-		var ret=[];
-		for(var o in exbuvasa.operators){
-			ret.push(o);
-		}
-		for(var o in exbuvasa.variables){
-			ret.push(o);
-		}
-		for(var o in exbuvasa.functions){
-			ret.push(o);
-		}
-		return ret;
-	}
+
+    function getTags() {
+        var ret = [];
+        for (var o in exbuvasa.operators) {
+            ret.push(o);
+        }
+        for (var o in exbuvasa.variables) {
+            ret.push(o);
+        }
+        for (var o in exbuvasa.functions) {
+            ret.push(o);
+        }
+        return ret;
+    }
 
     this.parse = function (input) {
         var input = " " + input + " ";
+        input = input.replace(/"/g, ''); //double quotes are not allowed
         var ok = true;
         var terms = [];
         var result = "";
         var tmp = "";
-        var error;
+        var msg;
 
         var openQuote = false;
         for (var ii = 0; ii < input.length; ii++) {
             var ch = input[ii];
-            if (ch == "'") { //abre o cierra comillas
+
+            if (ch == "'") { //open or close quotes
                 openQuote = !openQuote;
                 if (!openQuote) {
                     terms.push(tmp + ch);
@@ -131,7 +147,7 @@ function exbuvasa(props) {
                             }
 
                         } else if (va) {
-							terms.push(va);
+                            terms.push(va);
                         } else if (fu) {
                             var params = this.getParams(input.substring(ii));
                             terms.push(fu + "(" + params.params + ")");
@@ -146,7 +162,7 @@ function exbuvasa(props) {
                     }
                 } catch (e) {
                     ok = false;
-                    error = e;
+                    msg = e;
                     break;
                 }
                 terms.push(ch);
@@ -156,17 +172,23 @@ function exbuvasa(props) {
             }
         }
         if (openQuote) {
-            error = "Comilla sin cerrar: " + terms;
+            msg = this.text.unclosedQuote+ ": " + terms;
             ok = false;
         }
         var er = "";
-        var r = error || "Invalid expression";
+        var r = msg || this.text.invalidExpression;
         for (i = 0; i < terms.length; i++) {
             er = er + terms[i];
         }
+
         if (ok) {
+            if (er.trim() == "") {
+                ok = false;
+                msg = this.text.emptyExpression;
+            }
             try {
                 r = eval(er);
+                msg = r;
             } catch (e) {
                 r = e + " :" + er;
                 ok = false;
@@ -175,7 +197,7 @@ function exbuvasa(props) {
 
         return {
             "ok": ok,
-            "msg": error,
+            "msg": msg,
             "terms": terms,
             "expression": er,
             "result": r
@@ -190,7 +212,7 @@ function exbuvasa(props) {
         str
 
         if (!str.trim()[0] == "(") {
-            throw ("Se esperaba (");
+            throw (this.text.openParWasExpected);
         }
         var hasClosingPar = false;
         var tmp = "";
@@ -231,7 +253,7 @@ function exbuvasa(props) {
             }
         }
 
-        throw "Se esperaba )";
+        throw this.text.closeParWasExpected;
         function addParam(tmp) {
             var ptmp = exbuvasa.parse(tmp);
             if (!ptmp.ok) {
@@ -243,55 +265,62 @@ function exbuvasa(props) {
         }
     }
     if (props.jqinputselector) {
-			try{//only if jquery ui
-				function split( val ) {
-			  return val.split( / \s*/ );
-			}
-			function extractLast( term ) {
-			  return split( term ).pop();
-			}
-			$(props.jqinputselector).autocomplete({
-				minLength: 0,
-				source: function( request, response ) {
-				  // delegate back to autocomplete, but extract the last term
-				  response( $.ui.autocomplete.filter(
-					exbuvasa.tags, extractLast( request.term ) ) );
-				},
-				focus: function() {
-				  // prevent value inserted on focus
-				  return false;
-				},
-				select: function( event, ui ) {
-				  var terms = split( this.value );
-				  // remove the current input
-				  terms.pop();
-				  // add the selected item
-				  terms.push( ui.item.value );
-				  // add placeholder to get the comma-and-space at the end
-				  terms.push( "" );
-				  this.value = terms.join( " " );
-				  return false;
-				}
-			});
-		}catch(e){
-			console.log(e);
-		}
+        try { //only if jquery ui
+            function split(val) {
+                return val.split(/ \s*/);
+            }
+            function extractLast(term) {
+                return split(term).pop();
+            }
+
+            $(props.jqinputselector).autocomplete({
+                minLength: 0,
+                source: function (request, response) {
+                    // delegate back to autocomplete, but extract the last term
+                    response($.ui.autocomplete.filter(
+                            exbuvasa.tags, extractLast(request.term)));
+                },
+                focus: function () {
+                    // prevent value inserted on focus
+                    return false;
+                },
+                select: function (event, ui) {
+                    var terms = split(this.value);
+                    // remove the current input
+                    terms.pop();
+                    // add the selected item
+                    terms.push(ui.item.value);
+                    // add placeholder to get the comma-and-space at the end
+                    terms.push("");
+                    this.value = terms.join(" ");
+                    return false;
+                }
+            });
+
+        } catch (e) {
+            console.log(e);
+        }
         $(props.jqinputselector).keyup(function (e) {
             var ret = exbuvasa.parse($(this).val());
 
             $(exbuvasa.jqexpressionselector).val(ret.expression);
             $(exbuvasa.jqresultselector).val(ret.result);
-			if(exbuvasa.showtitle){
-				if (!ret.ok) {
-					$(this).attr("title", ret.result);
-					try {
-						$(this).tooltip();
-					} catch (e) {}
-				}else{
-					$(this).attr("title", "Ok");
-					$(this).tooltip();
-				}
-			}
+            if (exbuvasa.showtitle) {
+                if (!ret.ok) {
+                    $(this).attr("title", ret.result);
+
+                    try {
+                        $(this).tooltip();
+                    } catch (e) {}
+                } else {
+                    $(this).attr("title", ret.msg);
+                    $(this).tooltip();
+                }
+            }
+            $(this).attr("exbuvasa-ok", ret.ok);
+            $(this).attr("exbuvasa-result", ret.result);
+            $(this).attr("exbuvasa-msg", ret.msg);
+            $(this).attr("exbuvasa-expression", ret.expression);
             if (ret.ok) {
                 $(this).css('background-color', exbuvasa.okcolor);
             } else {
@@ -309,8 +338,21 @@ function exbuvasa(props) {
                 exbuvasa.allowedchars.indexOf(e.key) >= 0) {
                 return;
             } else {
+				console.log("'" +e.key +"' " + exbuvasa.text.charIsNotAllowed +"." + exbuvasa.text.allowedCharsAre+" "+ exbuvasa.allowedchars);
                 e.preventDefault();
             }
+        });
+        $(props.jqinputselector).bind("paste", function (e) {
+            var pastedData = e.originalEvent.clipboardData.getData('text');
+			var allowedchars="0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"+exbuvasa.allowedchars.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
+			for(var pd=0;pd<pastedData.length;pd++){
+				var c=pastedData[pd];
+				if(allowedchars.indexOf(c)<0){
+					console.log(exbuvasa.text.pastedText + " (" + pastedData + ") " + exbuvasa.text.hasNotAllowedChars+ " (" +c+") . " + exbuvasa.text.allowedCharsAre + " " +exbuvasa.allowedchars);
+					e.preventDefault();
+					break;
+				}
+			}			
         });
     }
 }
