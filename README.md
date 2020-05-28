@@ -48,6 +48,7 @@ console.log(new exbuvasa(props).parse("2 in (1,2,3,4)").result);
 
 You can use the built in functions and operators or define your own.
 
+
 Built in operators:
 
 **and**
@@ -73,7 +74,9 @@ Built in operators:
 **contains** ie: 'javascript' contains('java') returns true
 
 
+
 Built in functions:
+
 
 
 **left** ie: left('javascript',4) returns 'java'
@@ -83,6 +86,7 @@ Built in functions:
 **substring** ie: substring('javascript',2,4) returns 'va'
 
 **date** converts a string to a Date object
+
 
 
 ## Properties
@@ -103,15 +107,30 @@ An object which can contain the following:
 
 **jqresultselector**: element in which the result of evaluating te javascript expression will be showed
 
-**text**:
+**text**: object containing strings for messages. You can supply your own messages in your language. Example
+
+~~~
+text:{
+	doubleQuotesNotAllowed: "Double quotes are not allowed. Always use single quotes",
+	unclosedQuote: "Unclosed quote",
+	invalidExpression:"Invalid expression",
+	emptyExpression: "Empty expression",
+	openParWasExpected: "( was expected",
+	closeParWasExpected: ") was expected",
+	charIsNotAllowed: "is not allowed",
+	pastedText: "Pasted text",
+	hasNotAllowedChars: "has not allowed characters",
+	allowedCharsAre: "Allowed chars are letters, numbers and"
+	}
+~~~
 
 **variables**: object containing names of variables mapped with its values. String values must be enclosed in single quotes. Example
 
 ~~~
 variables:{
-  "name":"'peter'",
-  "age": "44",
-  "checkin": "'2020-05-25'"
+	"name":"'peter'",
+	"age": "44",
+	"checkin": "'2020-05-25'"
 }
 ~~~
 
@@ -120,9 +139,9 @@ variables:{
 
 ~~~
 functions:{
-        "part_of_a_string": "substring",
-        "date": "date",
-        "make_upper_case": "ucase"
+	"part_of_a_string": "substring",
+	"date": "date",
+	"make_upper_case": "ucase"
     }
 ~~~
 
@@ -130,17 +149,17 @@ functions:{
 
 ~~~
 operators:{
-  "and": "&&",
-  "or": "||",
-  "not": "!",
-  "gt": ">",
+	"and": "&&",
+	"or": "||",
+	"not": "!",
+	"gt": ">",
 	"ge": ">=",
-  "lt": "<",
+	"lt": "<",
 	"le": "<=",
-  "eq": "==",
-  "neq": "!=",
-  "in": "isin",
-  "contains": "contains"
+	"eq": "==",
+	"neq": "!=",
+	"in": "isin",
+"contains": "contains"
 }
 ~~~
 
@@ -156,13 +175,51 @@ function isin(val, arr) {
     }
 ~~~
 
+## Full properties example
 
-
-The operator will be resolve
-
-Example:
-Custom functions
-
+~~~
+props={
+	operators: {
+			"and": "&&",
+			"or": "||",
+			"not": "!",
+			"gt": ">",
+			"ge": ">=",
+			"lt": "<",
+			"le": "<=",
+			"eq": "==",
+			"neq": "!=",
+			"in": "isin",
+			"contains": "contains"
+		},
+	variables : {},
+	functions : {
+			"left": "left",
+			"right": "right",
+			"substring": "substr",
+			"date": "date"
+		},
+	okcolor :'#dfd',
+	notokcolor: '#fdd',
+	text:{
+			doubleQuotesNotAllowed: "Double quotes are not allowed. Always use single quotes",
+			unclosedQuote: "Unclosed quote",
+			invalidExpression:"Invalid expression",
+			emptyExpression: "Empty expression",
+			openParWasExpected: "( was expected",
+			closeParWasExpected: ") was expected",
+			charIsNotAllowed: "is not allowed",
+			pastedText: "Pasted text",
+			hasNotAllowedChars: "has not allowed characters",
+			allowedCharsAre: "Allowed chars are letters, numbers and"
+		},
+	showtitle:true,
+	allowedchars: "|!#%&/()=?',;.:-_+*@ ",
+	jqinputselector: "",
+	jqexpressionselector :"",
+	jqresultselector:""
+}
+~~~
 
 
 Exbuvasa was inspired by filtrex (https://github.com/joewalnes/filtrex). But I needed to run it not only as a jquery plugin, but also inside a java scriptengine
