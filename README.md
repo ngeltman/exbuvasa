@@ -75,6 +75,7 @@ Built in operators:
 
 Built in functions:
 
+
 **left** ie: left('javascript',4) returns 'java'
 
 **right** ie: right('javascript',6) returns 'script'
@@ -85,6 +86,7 @@ Built in functions:
 
 
 ## Properties
+
 An object which can contain the following:
 
 **okcolor**: default to '#dfd'
@@ -103,12 +105,19 @@ An object which can contain the following:
 
 **text**:
 
-**variables**: objecto containing names of variables mapped with its values. String values must be enclosed in single quotes. Example
+**variables**: object containing names of variables mapped with its values. String values must be enclosed in single quotes. Example
 
 ~~~
+variables:{
+  "name":"'peter'",
+  "age": "44",
+  "checkin": "'2020-05-25'"
+}
 ~~~
 
-**functions**: object containing names of the functions as string. The elements are the functions that the user types and the values are the names of the real functions as a string. The real functions has to be javascript native funcionts or exist elsewhere. Example:
+
+**functions**: object containing names of the functions as string. The elements are the names of the functions that the user types and the values are the names of the real functions as a string. The real functions has to be javascript native funcionts or exist elsewhere. Example:
+
 ~~~
 functions:{
         "part_of_a_string": "substring",
@@ -117,7 +126,41 @@ functions:{
     }
 ~~~
 
+**operators**: object containing names of the operators as string. The elements are the names of the operators that the user types and the values are the names of the real functions as a string. The real functions has to be javascript native funcionts or exist elsewhere. The difference between operators and functions is the operators takes the preceeding term as the first parameter. Example 
 
+~~~
+operators:{
+  "and": "&&",
+  "or": "||",
+  "not": "!",
+  "gt": ">",
+	"ge": ">=",
+  "lt": "<",
+	"le": "<=",
+  "eq": "==",
+  "neq": "!=",
+  "in": "isin",
+  "contains": "contains"
+}
+~~~
+
+In the expression 'java' in ('java','phyton','c++')  the operator "in" is processed in the function "isin" which will take 'java' as the fisrt parameter and the array ['java','phyton','c++'] as the second
+
+~~~
+function isin(val, arr) {
+        if (arr.indexOf(val) >= 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+~~~
+
+
+
+The operator will be resolve
+
+Example:
 Custom functions
 
 
