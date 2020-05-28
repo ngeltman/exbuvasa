@@ -31,7 +31,7 @@ var ebvs=new exbuvasa(props);
 ~~~
 jqinputselector has to be an input of type text or textarea
 
-As yhe user types an expression, exbuvasa sets the following attributes on the element (ie #expression)
+As the user types an expression, exbuvasa sets the following attributes on the element (ie #expression)
 ~~~
 exbuvasa-ok
 exbuvasa-result
@@ -44,8 +44,34 @@ exbuvasa-expression
 console.log(new exbuvasa().parse("2 in (1,2,3,4)").result);
 ~~~
 
+## Functions and operators
+
+You can use the built in functions and operators or define your own.
+
+Built in operators:
+
+**and**
+**or**
+**not**
+**gt** (>)
+**ge** (>=)
+**lt** (<)
+**le** (<=)
+**eq** (==)
+**neq** (!=)
+**in**  ie: 'a' in ('c','b','a') returns true
+**contains** ie: 'javascript' contains('java') returns true
+
+Built in functions:
+
+**left** ie: left('javascript',4) returns 'java'
+**right** ie: right('javascript',6) returns 'script'
+**substring** ie: substring('javascript',2,4) returns 'va'
+**date** converts a string to a Date object
+
+
 ## Properties
-An object whic can contain the following:
+An object which can contain the following:
 
 **okcolor**: default to '#dfd'
 
