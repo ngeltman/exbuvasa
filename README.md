@@ -41,7 +41,7 @@ exbuvasa-expression
 
 ## Basic usage without jQuery
 ~~~
-console.log(new exbuvasa().parse("2 in (1,2,3,4)").result);
+console.log(new exbuvasa(props).parse("2 in (1,2,3,4)").result);
 ~~~
 
 ## Functions and operators
@@ -51,22 +51,36 @@ You can use the built in functions and operators or define your own.
 Built in operators:
 
 **and**
+
 **or**
+
 **not**
+
 **gt** (>)
+
 **ge** (>=)
+
 **lt** (<)
+
 **le** (<=)
+
 **eq** (==)
+
 **neq** (!=)
+
 **in**  ie: 'a' in ('c','b','a') returns true
+
 **contains** ie: 'javascript' contains('java') returns true
+
 
 Built in functions:
 
 **left** ie: left('javascript',4) returns 'java'
+
 **right** ie: right('javascript',6) returns 'script'
+
 **substring** ie: substring('javascript',2,4) returns 'va'
+
 **date** converts a string to a Date object
 
 
@@ -86,6 +100,26 @@ An object which can contain the following:
 **jqexpressionselector**: element in which the resulting javascript expression will be showed
 
 **jqresultselector**: element in which the result of evaluating te javascript expression will be showed
+
+**text**:
+
+**variables**: objecto containing names of variables mapped with its values. String values must be enclosed in single quotes. Example
+
+~~~
+~~~
+
+**functions**: object containing names of the functions as string. The elements are the functions that the user types and the values are the names of the real functions as a string. The real functions has to be javascript native funcionts or exist elsewhere. Example:
+~~~
+functions:{
+        "part_of_a_string": "substring",
+        "date": "date",
+        "make_upper_case": "ucase"
+    }
+~~~
+
+
+Custom functions
+
 
 
 Exbuvasa was inspired by filtrex (https://github.com/joewalnes/filtrex). But I needed to run it not only as a jquery plugin, but also inside a java scriptengine
