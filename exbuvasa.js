@@ -21,9 +21,9 @@ function exbuvasa(props) {
         "or": "||",
         "not": "!",
         "gt": ">",
-		"ge": ">=",
+        "ge": ">=",
         "lt": "<",
-		"le": "<=",
+        "le": "<=",
         "eq": "==",
         "neq": "!=",
         "in": "isin",
@@ -39,19 +39,24 @@ function exbuvasa(props) {
     this.tags = getTags();
     this.okcolor = props.okcolor || '#dfd';
     this.notokcolor = props.notokcolor || '#fdd';
-	this.text=props.text||{
-		doubleQuotesNotAllowed: "Double quotes are not allowed. Always use single quotes",
-		unclosedQuote: "Unclosed quote",
-		invalidExpression:"Invalid expression",
-		emptyExpression: "Empty expression",
-		openParWasExpected: "( was expected",
-		closeParWasExpected: ") was expected",
-		charIsNotAllowed: "is not allowed",
-		pastedText: "Pasted text",
-		hasNotAllowedChars: "has not allowed characters",
-		allowedCharsAre: "Allowed chars are letters, numbers and"
-	}
+
+    this.okfontcolor = props.okfontcolor || '#0a0';
+    this.notokfontcolor = props.notokfontcolor || '#f55';
+    this.text = props.text || {
+        doubleQuotesNotAllowed: "Double quotes are not allowed. Always use single quotes",
+        unclosedQuote: "Unclosed quote",
+        invalidExpression: "Invalid expression",
+        emptyExpression: "Empty expression",
+        openParWasExpected: "( was expected",
+        closeParWasExpected: ") was expected",
+        charIsNotAllowed: "is not allowed",
+        pastedText: "Pasted text",
+        hasNotAllowedChars: "has not allowed characters",
+        allowedCharsAre: "Allowed chars are letters, numbers and",
+        help: "Write your expression or press space for autocomplete options"
+    }
     this.showtitle = true;
+	this.widget=widget;
     if (typeof props.showtitle != "undefined") {
         this.showtitle = props.showtitle;
     }
@@ -94,13 +99,22 @@ function exbuvasa(props) {
     function getTags() {
         var ret = [];
         for (var o in exbuvasa.operators) {
-            ret.push(o);
+            ret.push({
+                label: o,
+                category: "Operadores"
+            });
         }
         for (var o in exbuvasa.variables) {
-            ret.push(o);
+            ret.push({
+                label: o,
+                category: "Variables"
+            });
         }
         for (var o in exbuvasa.functions) {
-            ret.push(o);
+            ret.push({
+                label: o,
+                category: "Funciones"
+            });
         }
         return ret;
     }
@@ -172,7 +186,7 @@ function exbuvasa(props) {
             }
         }
         if (openQuote) {
-            msg = this.text.unclosedQuote+ ": " + terms;
+            msg = this.text.unclosedQuote + ": " + terms;
             ok = false;
         }
         var er = "";
@@ -264,16 +278,50 @@ function exbuvasa(props) {
             }
         }
     }
-    if (props.jqinputselector) {
-        try { //only if jquery ui
+	if (props.jqinputselector){
+		widget(props.jqinputselector);
+	}
+    function widget (jqinputselector) {
+		try { //only if jquery ui
             function split(val) {
                 return val.split(/ \s*/);
             }
             function extractLast(term) {
                 return split(term).pop();
             }
+			
+			$(jqinputselector).wrap("<div class='exbuvasa-wrap'></div>");
+			$(jqinputselector).before("<table class='exbuvasa-table'><tr>"
+					+"<td colspan='2' class='exbuvasa-msg'>&nbsp;</td></tr>"
+					+"<tr><td class='exbuvasa-input'></td><td class='exbuvasa-help' title='"+exbuvasa.text.help+"'><input type='button' value='?'></td></tr></table>");
+			$.each($(jqinputselector),function (i,e){
+				$(this).prev().find(".exbuvasa-input").append($(this));
+			});
+			
 
-            $(props.jqinputselector).autocomplete({
+            $.widget("custom.catcomplete", $.ui.autocomplete, {
+                _create: function () {
+                    this._super();
+                    this.widget().menu("option", "items", "> :not(.ui-autocomplete-category)");
+                },
+                _renderMenu: function (ul, items) {
+                    var that = this,
+                    currentCategory = "";
+                    $.each(items, function (index, item) {
+                        var li;
+                        if (item.category != currentCategory) {
+                            ul.append("<li class='ui-autocomplete-category'>" + item.category + "</li>");
+                            currentCategory = item.category;
+                        }
+                        li = that._renderItemData(ul, item);
+                        if (item.category) {
+                            li.attr("aria-label", item.category + " : " + item.label);
+                        }
+                    });
+                }
+            });
+
+            $(jqinputselector).catcomplete({
                 minLength: 0,
                 source: function (request, response) {
                     // delegate back to autocomplete, but extract the last term
@@ -300,21 +348,17 @@ function exbuvasa(props) {
         } catch (e) {
             console.log(e);
         }
-        $(props.jqinputselector).keyup(function (e) {
+        $(jqinputselector).keyup(function (e) {
             var ret = exbuvasa.parse($(this).val());
 
             $(exbuvasa.jqexpressionselector).val(ret.expression);
             $(exbuvasa.jqresultselector).val(ret.result);
             if (exbuvasa.showtitle) {
+				var m=$(this).closest(".exbuvasa-wrap").find(".exbuvasa-msg");
                 if (!ret.ok) {
-                    $(this).attr("title", ret.result);
-
-                    try {
-                        $(this).tooltip();
-                    } catch (e) {}
+                    m.html(ret.result).css('color', exbuvasa.notokfontcolor);                    
                 } else {
-                    $(this).attr("title", ret.msg);
-                    $(this).tooltip();
+                    m.html(ret.msg).css('color', exbuvasa.okfontcolor);
                 }
             }
             $(this).attr("exbuvasa-ok", ret.ok);
@@ -328,7 +372,7 @@ function exbuvasa(props) {
             }
         }).focus();
 
-        $(props.jqinputselector).keydown(function (e) {
+        $(jqinputselector).keydown(function (e) {
             if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110]) !== -1 || // Allow: backspace, delete, tab, escape and enter
                 (e.keyCode == 65 && e.ctrlKey === true) || // Allow: Ctrl+A
                 (e.keyCode >= 35 && e.keyCode <= 39) || // Allow: home, end, left, right
@@ -338,21 +382,22 @@ function exbuvasa(props) {
                 exbuvasa.allowedchars.indexOf(e.key) >= 0) {
                 return;
             } else {
-				console.log("'" +e.key +"' " + exbuvasa.text.charIsNotAllowed +"." + exbuvasa.text.allowedCharsAre+" "+ exbuvasa.allowedchars);
+                console.log("'" + e.key + "' " + exbuvasa.text.charIsNotAllowed + "." + exbuvasa.text.allowedCharsAre + " " + exbuvasa.allowedchars);
                 e.preventDefault();
             }
         });
-        $(props.jqinputselector).bind("paste", function (e) {
+        $(jqinputselector).bind("paste", function (e) {
             var pastedData = e.originalEvent.clipboardData.getData('text');
-			var allowedchars="0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"+exbuvasa.allowedchars.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
-			for(var pd=0;pd<pastedData.length;pd++){
-				var c=pastedData[pd];
-				if(allowedchars.indexOf(c)<0){
-					console.log(exbuvasa.text.pastedText + " (" + pastedData + ") " + exbuvasa.text.hasNotAllowedChars+ " (" +c+") . " + exbuvasa.text.allowedCharsAre + " " +exbuvasa.allowedchars);
-					e.preventDefault();
-					break;
-				}
-			}			
+            var allowedchars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz" + exbuvasa.allowedchars.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
+            for (var pd = 0; pd < pastedData.length; pd++) {
+                var c = pastedData[pd];
+                if (allowedchars.indexOf(c) < 0) {
+                    console.log(exbuvasa.text.pastedText + " (" + pastedData + ") " + exbuvasa.text.hasNotAllowedChars + " (" + c + ") . " + exbuvasa.text.allowedCharsAre + " " + exbuvasa.allowedchars);
+                    e.preventDefault();
+                    break;
+                }
+            }
         });
+
     }
 }
